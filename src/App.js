@@ -26,14 +26,12 @@ class App extends Component {
     })
   }
 
+  /*by using the spread operator [...], we can create a copy of the array state
+    this means we can combine the old elements with the new elements without mutating the original data*/
   //this will delete the person we click on (set to fire on click of relative <p>)
-  /*NOTE TO REMEMBER: arrays & objects are reference types. 
-  this means we haven't assigned a new value to the constant 'persons' as it's only holding a pointer
-  we changed the value of the element it was pointing to*/
-
   deletePersonHandler = (personIndex) => {
-    const persons = this.state.persons;  //fetching persons from state
-    persons.splice(personIndex, 1);  //removes 1 element from the array
+    const persons = [...this.state.persons]; //reaches out to persons in state, spreads out the elements of the array into a list of elements, which then get added into the new array
+    persons.splice(personIndex, 1);  //removes 1 element from the array & creates an updated version of the array
     this.setState({ persons: persons }); //updating the value of the persons constant because a person has been removed frome the array
   }
 
@@ -68,9 +66,9 @@ class App extends Component {
     if (this.state.showPersons) {
       persons = (
         <div>
-          {this.state.persons.map((person, index) => {
-            return <Person
-              click={() => this.deletePersonHandler(index)}
+          {this.state.persons.map((person, index) => {    //map over each element in the array, pass in index as argument
+            return <Person                                //return Person component as JSX 
+              click={() => this.deletePersonHandler(index)}     //deletes person at relevant index when user clicks (attached to <p> element in Person.js)
               name={person.name}
               age={person.age} />
           })}
