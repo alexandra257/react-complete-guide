@@ -16,15 +16,28 @@ class App extends Component {
 
 
   //--------------EVENT LISTENERS BELOW-------------------
-  nameChangedHandler = (event) => {
-    this.setState({
-      persons: [
-        { name: 'Alex', age: 24 },
-        { name: event.target.value, age: 28 },
-        { name: 'Jamie', age: 25 },
-      ]
-    })
+  //below we use a string id to select an array item (object);
+  nameChangedHandler = (event, id) => {
+    const personIndex = this.state.persons.findIndex(p => {   //we're using p to refer to 'person'
+      return p.id === id; //if the person's id === id we recieved as an argument to this function, return true & personIndex will hold the index of the person in the array for which the id's are equal	
+    });
+
+    //we can get the person itself, by reaching out to the persons in state
+    //again, we use the spread operator to avoid mutating the state (because JS objects are reference types)
+    const person = {       //the curly braces allow us to create a JS new object
+      ...this.state.persons[personIndex]   //spread is used infront of the object we're fetching & distributes all properties of the object we fetched, bringing them into the new object
+    };
+
+    //we now have a copy of perons, so below we do not mutate the original values
+    person.name = event.target.value;   // gets the value from the input field to update the name
+
+    const persons = [...this.state.persons];  //copies old array values & updates with new values 
+    persons[personIndex] = person; //updates the persons array at the correct index
+
+    this.setState({ persons: persons }); //state is set to the updated persons array (copy of old array with updated name)
   }
+
+
 
   /*by using the spread operator [...], we can create a copy of the array state
     this means we can combine the old elements with the new elements without mutating the original data*/
@@ -61,6 +74,8 @@ class App extends Component {
     /we can utilise the if statement here because we can use noraml JS within the render method
       only within the return menthod do we need to use JSX */
 
+    //below i'm using the  map()'s index to select an array item
+
     let persons = null; //we set the persons variable to nothing
 
     if (this.state.showPersons) {
@@ -71,7 +86,11 @@ class App extends Component {
               click={() => this.deletePersonHandler(index)}     //deletes person at relevant index when user clicks (attached to <p> element in Person.js)
               name={person.name}
               age={person.age}
-              key={person.id} />//
+              key={person.id}
+              changed={(event) => this.nameChangedHandler(event, person.id)} />
+            //above we use the function syntax for the changed prop so we can pass it the event object
+            //this then allows us to gain access to the person properties, as changed is within the .map() method
+            //we can now use persons data (in particular the id) in the nameChangedHandler method
           })}
         </div>
       );
@@ -83,7 +102,9 @@ class App extends Component {
         <h1>Hi, I'm a React App</h1>
         <p>This is really working!</p>
 
-        <button style={style} onClick={this.togglePersonsHandler}>Toggle</button>
+        <button
+          style={style}
+          onClick={this.togglePersonsHandler}>Toggle Person</button>
 
         {persons}   {/*referencing the persons variable in the return method*/}
 
