@@ -16,17 +16,6 @@ class App extends Component {
 
 
   //--------------EVENT LISTENERS BELOW-------------------
-
-  switchNameHandler = (newName) => {
-    this.setState({
-      persons: [
-        { name: newName, age: 24 },
-        { name: 'Stephy', age: 28 },
-        { name: 'Jamie', age: 25 },
-      ]
-    })
-  }
-
   nameChangedHandler = (event) => {
     this.setState({
       persons: [
@@ -37,6 +26,19 @@ class App extends Component {
     })
   }
 
+  //this will delete the person we click on (set to fire on click of relative <p>)
+  /*NOTE TO REMEMBER: arrays & objects are reference types. 
+  this means we haven't assigned a new value to the constant 'persons' as it's only holding a pointer
+  we changed the value of the element it was pointing to*/
+
+  deletePersonHandler = (personIndex) => {
+    const persons = this.state.persons;  //fetching persons from state
+    persons.splice(personIndex, 1);  //removes 1 element from the array
+    this.setState({ persons: persons }); //updating the value of the persons constant because a person has been removed frome the array
+  }
+
+
+
   togglePersonsHandler = () => {
     const doesShow = this.state.showPersons;  //storing the current state of showPersons in doesShow
     this.setState({ showPersons: !doesShow })  //setting state of showPersons to what doesShow is not
@@ -45,7 +47,6 @@ class App extends Component {
 
 
   //--------------RENDER METHOD BELOW---------------------
-
   //note that the button event handler syntax is inefficient but may be uesful where the bind method isn't so appropriate
   render() {  //render gets called everytime React checks to see if we need to re-render the page
 
@@ -63,11 +64,13 @@ class App extends Component {
       only within the return menthod do we need to use JSX */
 
     let persons = null; //we set the persons variable to nothing
+
     if (this.state.showPersons) {
       persons = (
         <div>
-          {this.state.persons.map(person => {    //map over each element in the array
-            return <Person                    //return a <Person/> component as the JSX representative (JSX object) of the intial elements from state
+          {this.state.persons.map((person, index) => {
+            return <Person
+              click={() => this.deletePersonHandler(index)}
               name={person.name}
               age={person.age} />
           })}
