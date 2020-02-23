@@ -40,7 +40,7 @@ class App extends Component {
 
 
   //note that the button event handler syntax is inefficient but may be uesful where the bind method isn't so appropriate
-  render() {
+  render() {  //render gets called everytime React checks to see if we need to re-render the page
 
     const style = {
       backgroundColor: 'white',
@@ -50,6 +50,27 @@ class App extends Component {
       cursor: 'pointer'
     };
 
+    let persons = null;
+    //we can utilise the if statement here because we can use noraml JS within the render method
+    //only within the return menthod do we need to use JSX
+    if (this.state.showPersons) { //if showPersons in state is true
+      persons = (
+        <div>
+          <Person
+            name={this.state.persons[0].name}
+            age={this.state.persons[0].age} />
+
+          <Person name={this.state.persons[1].name}
+            age={this.state.persons[1].age}
+            click={this.switchNameHandler.bind(this, 'Alex')}
+            changed={this.nameChangedHandler}> My Hobbies: Yoga </Person>
+
+          <Person name={this.state.persons[2].name}
+            age={this.state.persons[2].age} />
+        </div>
+      )
+    }
+
     return (
       <div className="App">
         <h1>Hi, I'm a React App</h1>
@@ -58,26 +79,11 @@ class App extends Component {
         <button
           style={style}
           onClick={this.togglePersonsHandler}>
-          Toggle Persons
+          Toggle
           </button>
-        {
-          this.state.showPersons ?     //first half of ternary expression, is a boolean value so automatically assigns to true 
 
-            <div>
-              <Person
-                name={this.state.persons[0].name}
-                age={this.state.persons[0].age} />
+        {persons}
 
-              <Person name={this.state.persons[1].name}
-                age={this.state.persons[1].age}
-                click={this.switchNameHandler.bind(this, 'Alex')}
-                changed={this.nameChangedHandler}> My Hobbies: Yoga </Person>
-
-              <Person name={this.state.persons[2].name}
-                age={this.state.persons[2].age} />
-
-            </div> : null     //second half of the ternary expression, is a boolean value so automatically assigns to false 
-        }
       </div>
     );
   }
