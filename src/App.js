@@ -6,9 +6,9 @@ class App extends Component {
 
   state = {
     persons: [
-      { name: 'Alex', age: 24 },
-      { name: 'Stephy', age: 28 },
-      { name: 'Jamie', age: 25 },
+      { id: 'gsger', name: 'Alex', age: 24 },
+      { id: 'hesgf', name: 'Stephy', age: 28 },
+      { id: 'vsdgh', name: 'Jamie', age: 25 },
     ],
     showPersons: false
   }
@@ -32,7 +32,7 @@ class App extends Component {
   deletePersonHandler = (personIndex) => {
     const persons = [...this.state.persons]; //reaches out to persons in state, spreads out the elements of the array into a list of elements, which then get added into the new array
     persons.splice(personIndex, 1);  //removes 1 element from the array & creates an updated version of the array
-    this.setState({ persons: persons }); //updating the value of the persons constant because a person has been removed frome the array
+    this.setState({ persons: persons }); //updating the state of the persons constant because a person has been removed frome the array
   }
 
 
@@ -70,7 +70,8 @@ class App extends Component {
             return <Person                                //return Person component as JSX 
               click={() => this.deletePersonHandler(index)}     //deletes person at relevant index when user clicks (attached to <p> element in Person.js)
               name={person.name}
-              age={person.age} />
+              age={person.age}
+              key={person.id} />//
           })}
         </div>
       );
