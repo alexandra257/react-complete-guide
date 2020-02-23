@@ -8,7 +8,8 @@ class App extends Component {
       { name: 'Alex', age: 24 },
       { name: 'Stephy', age: 28 },
       { name: 'Jamie', age: 25 },
-    ]
+    ],
+    showPersons: false
   }
 
   switchNameHandler = (newName) => {
@@ -32,6 +33,12 @@ class App extends Component {
     })
   }
 
+  togglePersonsHandler = () => {
+    const doesShow = this.state.showPersons;  //storing the current state of showPersons in doesShow
+    this.setState({ showPersons: !doesShow })  //setting state of showPersons to what doesShow is not
+  }
+
+
   //note that the button event handler syntax is inefficient but may be uesful where the bind method isn't so appropriate
   render() {
 
@@ -50,24 +57,27 @@ class App extends Component {
 
         <button
           style={style}
-          onClick={() => this.switchNameHandler('Alexandra!!')}>
-          Switch Name
+          onClick={this.togglePersonsHandler}>
+          Toggle Persons
           </button>
+        {
+          this.state.showPersons ?     //first half of ternary expression, is a boolean value so automatically assigns to true 
 
-        <Person
-          name={this.state.persons[0].name}
-          age={this.state.persons[0].age}
-        />
+            <div>
+              <Person
+                name={this.state.persons[0].name}
+                age={this.state.persons[0].age} />
 
-        <Person name={this.state.persons[1].name}
-          age={this.state.persons[1].age}
-          click={this.switchNameHandler.bind(this, 'Alex')}
-          changed={this.nameChangedHandler}> My Hobbies: Yoga </Person>
+              <Person name={this.state.persons[1].name}
+                age={this.state.persons[1].age}
+                click={this.switchNameHandler.bind(this, 'Alex')}
+                changed={this.nameChangedHandler}> My Hobbies: Yoga </Person>
 
-        <Person name={this.state.persons[2].name}
-          age={this.state.persons[2].age}
-        />
+              <Person name={this.state.persons[2].name}
+                age={this.state.persons[2].age} />
 
+            </div> : null     //second half of the ternary expression, is a boolean value so automatically assigns to false 
+        }
       </div>
     );
   }
