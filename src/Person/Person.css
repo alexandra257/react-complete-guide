@@ -6,3 +6,16 @@
     padding: 16px;
     text-align: center;
 }
+
+/* 
+    We could write the query with CSS, but Radium allows us to scope the query
+    to a component or change it dynamically
+    
+    CSS QUERY: 
+
+    @media (min-width: 500px) {
+    .Person {
+        width: 450px;
+    }
+} */
+

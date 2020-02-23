@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import './App.css';
+import Radium, { StyleRoot } from 'radium';
 import Person from './Person/Person';
 
 class App extends Component {
-
   state = {
     persons: [
       { id: 'gsger', name: 'Alex', age: 24 },
@@ -12,8 +12,6 @@ class App extends Component {
     ],
     showPersons: false
   }
-
-
 
   //--------------EVENT LISTENERS BELOW-------------------
   //below we use a string id to select an array item (object);
@@ -61,12 +59,18 @@ class App extends Component {
   //note that the button event handler syntax is inefficient but may be uesful where the bind method isn't so appropriate
   render() {  //render gets called everytime React checks to see if we need to re-render the page
 
+    //with :'hover' we are assigning a css pseudo selector as a property using Radium
     const style = {
-      backgroundColor: 'white',
+      backgroundColor: 'green',
+      color: 'white',
       font: 'inherit',
       border: '1px solid blue',
       padding: '8px',
-      cursor: 'pointer'
+      cursor: 'pointer',
+      ':hover': {
+        backgroundColor: 'lightgreen',
+        color: 'black'
+      }
     };
 
 
@@ -94,23 +98,45 @@ class App extends Component {
           })}
         </div>
       );
+
+      //using javascript to manipulate whatever style we binded to the property
+      style.backgroundColor = 'red';  //if persons is false, the button background will be red
+
+      style[':hover'] = {             //Radium
+        backgroundColor: 'salmon',
+        color: 'black'
+      }
+
+    }
+
+    // let classes = ['red', 'bold'].join(' '); //same class names assigned in App.css
+    //join turns the array of strings into one string = "red bold" (this is a css class list that we can assign to className)
+
+    const classes = [];
+    if (this.state.persons.length <= 2) {  //if there are 2 Person rendered, text will turn red
+      classes.push('red') // classes = ['red']
+    }
+    if (this.state.persons.length <= 1) { //if there is 1 Person rendered, text will be red & bold
+      classes.push('bold') // classes = ['red', 'bold']
     }
 
 
     return (
-      <div className="App">
-        <h1>Hi, I'm a React App</h1>
-        <p>This is really working!</p>
+      <StyleRoot>
+        <div className="App">
+          <h1>Hi, I'm a React App</h1>
+          <p className={classes.join(' ')}>This is really working!</p> {/*styling is below the Person conditional rendering*/}
 
-        <button
-          style={style}
-          onClick={this.togglePersonsHandler}>Toggle Person</button>
+          <button
+            style={style}
+            onClick={this.togglePersonsHandler}>Toggle Person</button>
 
-        {persons}   {/*referencing the persons variable in the return method*/}
+          {persons}
 
-      </div>
+        </div>
+      </StyleRoot>
     );
   }
 }
 
-export default App;
+export default Radium(App);
