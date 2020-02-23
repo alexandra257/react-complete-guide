@@ -3,6 +3,7 @@ import './App.css';
 import Person from './Person/Person';
 
 class App extends Component {
+
   state = {
     persons: [
       { name: 'Alex', age: 24 },
@@ -11,6 +12,10 @@ class App extends Component {
     ],
     showPersons: false
   }
+
+
+
+  //--------------EVENT LISTENERS BELOW-------------------
 
   switchNameHandler = (newName) => {
     this.setState({
@@ -21,7 +26,6 @@ class App extends Component {
       ]
     })
   }
-
 
   nameChangedHandler = (event) => {
     this.setState({
@@ -39,6 +43,9 @@ class App extends Component {
   }
 
 
+
+  //--------------RENDER METHOD BELOW---------------------
+
   //note that the button event handler syntax is inefficient but may be uesful where the bind method isn't so appropriate
   render() {  //render gets called everytime React checks to see if we need to re-render the page
 
@@ -50,39 +57,33 @@ class App extends Component {
       cursor: 'pointer'
     };
 
-    let persons = null;
-    //we can utilise the if statement here because we can use noraml JS within the render method
-    //only within the return menthod do we need to use JSX
-    if (this.state.showPersons) { //if showPersons in state is true
+
+    /*----------------- DYNAMICALLY RENDERING PERSONS COMPONENT-----------------
+    /we can utilise the if statement here because we can use noraml JS within the render method
+      only within the return menthod do we need to use JSX */
+
+    let persons = null; //we set the persons variable to nothing
+    if (this.state.showPersons) {
       persons = (
         <div>
-          <Person
-            name={this.state.persons[0].name}
-            age={this.state.persons[0].age} />
-
-          <Person name={this.state.persons[1].name}
-            age={this.state.persons[1].age}
-            click={this.switchNameHandler.bind(this, 'Alex')}
-            changed={this.nameChangedHandler}> My Hobbies: Yoga </Person>
-
-          <Person name={this.state.persons[2].name}
-            age={this.state.persons[2].age} />
+          {this.state.persons.map(person => {    //map over each element in the array
+            return <Person                    //return a <Person/> component as the JSX representative (JSX object) of the intial elements from state
+              name={person.name}
+              age={person.age} />
+          })}
         </div>
-      )
+      );
     }
+
 
     return (
       <div className="App">
         <h1>Hi, I'm a React App</h1>
         <p>This is really working!</p>
 
-        <button
-          style={style}
-          onClick={this.togglePersonsHandler}>
-          Toggle
-          </button>
+        <button style={style} onClick={this.togglePersonsHandler}>Toggle</button>
 
-        {persons}
+        {persons}   {/*referencing the persons variable in the return method*/}
 
       </div>
     );
